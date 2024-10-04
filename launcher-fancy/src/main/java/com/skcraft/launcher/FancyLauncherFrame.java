@@ -12,6 +12,7 @@ import com.skcraft.launcher.swing.WebpagePanel;
 import lombok.NonNull;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class FancyLauncherFrame extends LauncherFrame {
 
@@ -29,6 +30,10 @@ public class FancyLauncherFrame extends LauncherFrame {
         SwingHelper.removeOpaqueness(getInstancesTable());
         SwingHelper.removeOpaqueness(getInstanceScroll());
         getInstanceScroll().setBorder(BorderFactory.createEmptyBorder());
+        getInstancesTable().setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+        getRefreshButton().setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+        getOptionsButton().setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+        getUpdateCheck().setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
     }
 
     @Override
