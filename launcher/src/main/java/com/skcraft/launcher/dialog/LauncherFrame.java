@@ -50,10 +50,15 @@ public class LauncherFrame extends JFrame {
     private final JScrollPane instanceScroll = new JScrollPane(instancesTable);
     private WebpagePanel webView;
     private JSplitPane splitPane;
+    @Getter
     private final JButton launchButton = new JButton(SharedLocale.tr("launcher.launch"));
+    @Getter
     private final JButton refreshButton = new JButton(SharedLocale.tr("launcher.checkForUpdates"));
+    @Getter
     private final JButton optionsButton = new JButton(SharedLocale.tr("launcher.options"));
+    @Getter
     private final JButton selfUpdateButton = new JButton(SharedLocale.tr("launcher.updateLauncher"));
+    @Getter
     private final JCheckBox updateCheck = new JCheckBox(SharedLocale.tr("launcher.downloadUpdates"));
 
     /**
