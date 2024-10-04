@@ -98,12 +98,7 @@ public final class Launcher {
 
         setDefaultConfig();
 
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                cleanupExtractDir();
-            }
-        });
+        executor.submit(this::cleanupExtractDir);
 
         updateManager.checkForUpdate(null);
     }
