@@ -66,6 +66,15 @@ public class AccountSelectDialog extends JDialog {
 		if (launcher.getConfig().isOfflineEnabled()) {
 			buttonsPanel.addElement(offlineButton);
 		}
+
+		if(SwingHelper.getLookAndFeel().getName().equals("Substance Graphite")) {
+			cancelButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+			loginButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+			addMicrosoftButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+			removeSelected.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+			offlineButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+		}
+
 		buttonsPanel.addGlue();
 		buttonsPanel.addElement(cancelButton);
 		buttonsPanel.addElement(loginButton);

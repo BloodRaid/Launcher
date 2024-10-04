@@ -473,6 +473,15 @@ public final class SwingHelper {
         }
     }
 
+    public static LookAndFeel getLookAndFeel() {
+        try {
+            return UIManager.getLookAndFeel();
+        } catch (Exception e) {
+            log.log(Level.WARNING, "Failed to get look and feel", e);
+            return null;
+        }
+    }
+
     public static void setSwingProperties(String appName) {
         UIManager.getDefaults().put("SplitPane.border", BorderFactory.createEmptyBorder());
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", appName);
