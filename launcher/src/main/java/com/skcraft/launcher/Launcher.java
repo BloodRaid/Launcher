@@ -89,8 +89,7 @@ public final class Launcher {
     public Launcher(@NonNull File baseDir, @NonNull File configDir) throws IOException {
         SharedLocale.loadBundle("com.skcraft.launcher.lang.Launcher", Locale.getDefault());
 
-        this.baseDir = setFileDirectory();
-        configDir = setFileDirectory();
+        this.baseDir = baseDir.getAbsoluteFile();
         this.properties = LauncherUtils.loadProperties(Launcher.class, "launcher.properties", "com.skcraft.launcher.propertiesFile");
         this.instances = new InstanceList(this);
         this.assets = new AssetsRoot(new File(baseDir, "assets"));
@@ -102,19 +101,6 @@ public final class Launcher {
         executor.submit(this::cleanupExtractDir);
 
         updateManager.checkForUpdate(null);
-    }
-
-    private File setFileDirectory() {
-        String OS = System.getProperty("os.name").toLowerCase();
-        if (OS.contains("win")) {
-            return new File(System.getenv("AppData") + "\\NGLauncher\\");
-        } else if(OS.contains("mac")) {
-            return new File(System.getProperty("user.home") + "/Library/Application Support/NGLauncher/");
-        } else if(OS.contains("nix") || OS.contains("nux") || OS.contains("aix")){
-            return new File(System.getProperty("user.home") + "/NGLauncher/");
-        } else {
-            return new File(System.getProperty("user.home") + "/NGLauncher/");
-        }
     }
 
     /**
