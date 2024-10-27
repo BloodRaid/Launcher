@@ -16,6 +16,7 @@ import com.skcraft.launcher.util.SwingExecutor;
 import lombok.RequiredArgsConstructor;
 
 import javax.swing.*;
+import javax.swing.plaf.InsetsUIResource;
 import java.awt.*;
 import java.util.concurrent.Callable;
 
@@ -67,9 +68,10 @@ public class AccountSelectDialog extends JDialog {
 			buttonsPanel.addElement(offlineButton);
 		}
 
-		if(SwingHelper.getLookAndFeel().getName().equals("Substance Graphite")) {
+		if(SwingHelper.getLookAndFeel().getName().equals("FlatLaf Dark")) {
 			cancelButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
-			loginButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+			loginButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+			loginButton.setMargin(new InsetsUIResource(2, 14, 2, 14));
 			addMicrosoftButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
 			removeSelected.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
 			offlineButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
