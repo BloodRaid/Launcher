@@ -101,7 +101,7 @@ public class AccountSelectDialog extends JDialog {
 		loginButton.addActionListener(ev -> attemptExistingLogin(accountList.getSelectedValue()));
 		cancelButton.addActionListener(ev -> dispose());
 
-		addMicrosoftButton.addActionListener(ev -> attemptMicrosoftLogin());
+		addMicrosoftButton.addActionListener(ev -> attemptMicrosoftLogin(SharedLocale.tr("login.microsoft.seeBrowser")));
 
 		offlineButton.addActionListener(ev ->
 				setResult(new OfflineSession(launcher.getProperties().getProperty("offlinePlayerName"))));
