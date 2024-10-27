@@ -6,11 +6,11 @@
 
 package com.skcraft.launcher.skin;
 
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import com.formdev.flatlaf.FlatDarkLaf;
 
-public class LauncherLookAndFeel extends SubstanceLookAndFeel {
+public class LauncherLookAndFeel extends FlatDarkLaf {
 
     public LauncherLookAndFeel() {
-        super(new LauncherSkin());
+        setup();
     }
 }
