@@ -185,9 +185,13 @@ public class Bootstrap {
     }
 
     private static File getFileChooseDefaultDir() {
-        JFileChooser chooser = new JFileChooser();
-        FileSystemView fsv = chooser.getFileSystemView();
-        return fsv.getDefaultDirectory();
+        String userHome = System.getProperty("user.home");
+        String appDataRoaming = System.getenv("APPDATA");
+        if (appDataRoaming != null) {
+            return new File(appDataRoaming);
+        } else {
+            return new File(userHome, "AppData/Roaming");
+        }
     }
 
     private File getUserLauncherDir() {
