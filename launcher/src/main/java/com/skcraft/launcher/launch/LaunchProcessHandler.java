@@ -38,16 +38,13 @@ public class LaunchProcessHandler implements Function<Process, ProcessConsoleFra
         log.info("Watching process " + process);
 
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    consoleFrame = new ProcessConsoleFrame(CONSOLE_NUM_LINES, true);
-                    consoleFrame.setProcess(process);
-                    consoleFrame.setVisible(true);
-                    MessageLog messageLog = consoleFrame.getMessageLog();
-                    messageLog.consume(process.getInputStream());
-                    messageLog.consume(process.getErrorStream());
-                }
+            SwingUtilities.invokeAndWait(() -> {
+                consoleFrame = new ProcessConsoleFrame(CONSOLE_NUM_LINES, true);
+                consoleFrame.setProcess(process);
+                if(launcher.getConfig().isEnableConsole()) consoleFrame.setVisible(true);
+                MessageLog messageLog = consoleFrame.getMessageLog();
+                messageLog.consume(process.getInputStream());
+                messageLog.consume(process.getErrorStream());
             });
 
             // Wait for the process to end
