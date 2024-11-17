@@ -39,7 +39,7 @@ public class LaunchProcessHandler implements Function<Process, ProcessConsoleFra
 
         try {
             SwingUtilities.invokeAndWait(() -> {
-                consoleFrame = new ProcessConsoleFrame(CONSOLE_NUM_LINES, true);
+                consoleFrame = new ProcessConsoleFrame(CONSOLE_NUM_LINES, true, launcher.getConfig());
                 consoleFrame.setProcess(process);
                 if(launcher.getConfig().isEnableConsole()) consoleFrame.setVisible(true);
                 MessageLog messageLog = consoleFrame.getMessageLog();

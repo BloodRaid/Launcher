@@ -38,6 +38,7 @@ public class Configuration {
     private String proxyPassword;
     private String gameKey;
     private boolean enableConsole;
+    private boolean enableTrayIcon;
     private boolean serverEnabled = false;
     private String serverHost;
     private int serverPort = 25565;
