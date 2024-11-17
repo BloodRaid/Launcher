@@ -58,6 +58,7 @@ public class ConfigurationDialog extends JDialog {
     private final JButton aboutButton = new JButton(SharedLocale.tr("options.about"));
     private final JButton logButton = new JButton(SharedLocale.tr("options.launcherConsole"));
     private final JCheckBox enableConsole = new JCheckBox(SharedLocale.tr("options.enableConsole"));
+    private final JCheckBox enableTrayIcon = new JCheckBox(SharedLocale.tr("options.enableTrayIcon"));
 
     /**
      * Create a new configuration dialog.
@@ -105,6 +106,7 @@ public class ConfigurationDialog extends JDialog {
         mapper.map(proxyPasswordText, "proxyPassword");
         mapper.map(gameKeyText, "gameKey");
         mapper.map(enableConsole, "enableConsole");
+        mapper.map(enableTrayIcon, "enableTrayIcon");
 
         mapper.copyFromObject();
     }
@@ -135,6 +137,7 @@ public class ConfigurationDialog extends JDialog {
 
         advancedPanel.addRow(new JLabel(SharedLocale.tr("options.gameKey")), gameKeyText);
         advancedPanel.addRow(enableConsole);
+        advancedPanel.addRow(enableTrayIcon);
         SwingHelper.removeOpaqueness(advancedPanel);
         tabbedPane.addTab(SharedLocale.tr("options.advancedTab"), SwingHelper.alignTabbedPane(advancedPanel));
 

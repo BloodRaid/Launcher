@@ -6,6 +6,8 @@
 
 package com.skcraft.launcher.dialog;
 
+import com.skcraft.launcher.Configuration;
+import com.skcraft.launcher.Launcher;
 import com.skcraft.launcher.swing.LinedBoxPanel;
 import com.skcraft.launcher.swing.SwingHelper;
 import com.skcraft.launcher.util.SharedLocale;
@@ -33,6 +35,7 @@ public class ProcessConsoleFrame extends ConsoleFrame {
     @Getter @Setter private boolean killOnClose;
 
     private PrintWriter processOut;
+    private final Configuration config;
 
     /**
      * Create a new instance of the frame.
@@ -40,8 +43,9 @@ public class ProcessConsoleFrame extends ConsoleFrame {
      * @param numLines the number of log lines
      * @param colorEnabled whether color is enabled in the log
      */
-    public ProcessConsoleFrame(int numLines, boolean colorEnabled) {
+    public ProcessConsoleFrame(int numLines, boolean colorEnabled, Configuration configuration) {
         super(SharedLocale.tr("console.title"), numLines, colorEnabled);
+        config = configuration;
         processOut = new PrintWriter(
                 getMessageLog().getOutputStream(new Color(0, 0, 255)), true);
         initComponents();
@@ -131,9 +135,10 @@ public class ProcessConsoleFrame extends ConsoleFrame {
                 contextualClose();
             }
         });
-        
-        if (!setupTrayIcon()) {
-            minimizeButton.setEnabled(true);
+        if(config.isEnableTrayIcon()) {
+            if (!setupTrayIcon()) {
+                minimizeButton.setEnabled(true);
+            }
         }
     }
 
