@@ -10,7 +10,6 @@ import com.skcraft.launcher.Launcher;
 import com.skcraft.launcher.swing.LinedBoxPanel;
 import com.skcraft.launcher.swing.MessageLog;
 import com.skcraft.launcher.swing.SwingHelper;
-import com.skcraft.launcher.util.PastebinPoster;
 import com.skcraft.launcher.util.SharedLocale;
 import lombok.Getter;
 import lombok.NonNull;
@@ -80,12 +79,10 @@ public class ConsoleFrame extends JFrame {
      * Add components to the frame.
      */
     private void initComponents() {
-        JButton pastebinButton = new JButton(SharedLocale.tr("console.uploadLog"));
         JButton clearLogButton = new JButton(SharedLocale.tr("console.clearLog"));
         buttonsPanel = new LinedBoxPanel(true);
 
         buttonsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        buttonsPanel.addElement(pastebinButton);
         buttonsPanel.addElement(clearLogButton);
 
         add(buttonsPanel, BorderLayout.NORTH);
@@ -97,12 +94,6 @@ public class ConsoleFrame extends JFrame {
             }
         });
 
-        pastebinButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pastebinLog();
-            }
-        });
     }
 
     /**
@@ -123,28 +114,6 @@ public class ConsoleFrame extends JFrame {
         messageLog.clear();
         registeredGlobalLog = false;
         dispose();
-    }
-
-    /**
-     * Send the contents of the message log to a pastebin.
-     */
-    private void pastebinLog() {
-        String text = messageLog.getPastableText();
-        // Not really bytes!
-        messageLog.log(tr("console.pasteUploading", text.length()), messageLog.asHighlighted());
-
-        PastebinPoster.paste(text, new PastebinPoster.PasteCallback() {
-            @Override
-            public void handleSuccess(String url) {
-                messageLog.log(tr("console.pasteUploaded", url), messageLog.asHighlighted());
-                SwingHelper.openURL(url, messageLog);
-            }
-
-            @Override
-            public void handleError(String err) {
-                messageLog.log(tr("console.pasteFailed", err), messageLog.asError());
-            }
-        });
     }
 
     public static void showMessages() {
