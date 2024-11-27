@@ -23,6 +23,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URI;
 import java.util.Arrays;
 
 /**
@@ -31,6 +32,7 @@ import java.util.Arrays;
 public class ConfigurationDialog extends JDialog {
 
     private final Configuration config;
+    private final Launcher launcher;
     private final ObjectSwingMapper mapper;
 
     private final JPanel tabContainer = new JPanel(new BorderLayout());
@@ -57,6 +59,7 @@ public class ConfigurationDialog extends JDialog {
     private final JButton cancelButton = new JButton(SharedLocale.tr("button.cancel"));
     private final JButton aboutButton = new JButton(SharedLocale.tr("options.about"));
     private final JButton logButton = new JButton(SharedLocale.tr("options.launcherConsole"));
+    private final JButton privacyPolicyButton = new JButton(SharedLocale.tr("options.privacyPolicy"));
     private final JCheckBox enableConsole = new JCheckBox(SharedLocale.tr("options.enableConsole"));
     private final JCheckBox enableTrayIcon = new JCheckBox(SharedLocale.tr("options.enableTrayIcon"));
 
@@ -70,6 +73,7 @@ public class ConfigurationDialog extends JDialog {
         super(owner, ModalityType.DOCUMENT_MODAL);
 
         this.config = launcher.getConfig();
+        this.launcher = launcher;
         mapper = new ObjectSwingMapper(config);
 
         JavaRuntime[] javaRuntimes = JavaRuntimeFinder.getAvailableRuntimes().toArray(new JavaRuntime[0]);
@@ -89,7 +93,7 @@ public class ConfigurationDialog extends JDialog {
         setTitle(SharedLocale.tr("options.title"));
         initComponents(); // Must be called after jvmRuntime model setup
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(new Dimension(400, 500));
+        setSize(new Dimension(500, 500));
         setResizable(false);
         setLocationRelativeTo(owner);
 
@@ -146,6 +150,7 @@ public class ConfigurationDialog extends JDialog {
         buttonsPanel.addGlue();
         buttonsPanel.addElement(okButton);
         buttonsPanel.addElement(cancelButton);
+        buttonsPanel.addElement(privacyPolicyButton);
 
         tabContainer.add(tabbedPane, BorderLayout.CENTER);
         tabContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -174,6 +179,24 @@ public class ConfigurationDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ConsoleFrame.showMessages();
+            }
+        });
+
+        privacyPolicyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int response = JOptionPane.showConfirmDialog(null,
+                        SharedLocale.tr("options.externalLinkMessage"),
+                        SharedLocale.tr("options.externalLinkTitle"),
+                        JOptionPane.YES_NO_OPTION);
+
+                if (response == JOptionPane.YES_OPTION) {
+                    try {
+                        Desktop.getDesktop().browse(new URI(String.format(launcher.getProperties().getProperty("privacyPolicyUrl"))));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
         });
 
