@@ -53,13 +53,12 @@ public class ConfigurationDialog extends JDialog {
     private final JTextField proxyUsernameText = new JTextField();
     private final JPasswordField proxyPasswordText = new JPasswordField();
     private final FormPanel advancedPanel = new FormPanel();
-    private final JTextField gameKeyText = new JTextField();
+    private final JPasswordField gameKeyText = new JPasswordField();
     private final LinedBoxPanel buttonsPanel = new LinedBoxPanel(true);
     private final JButton okButton = new JButton(SharedLocale.tr("button.ok"));
     private final JButton cancelButton = new JButton(SharedLocale.tr("button.cancel"));
     private final JButton aboutButton = new JButton(SharedLocale.tr("options.about"));
     private final JButton logButton = new JButton(SharedLocale.tr("options.launcherConsole"));
-    private final JButton privacyPolicyButton = new JButton(SharedLocale.tr("options.privacyPolicy"));
     private final JCheckBox enableConsole = new JCheckBox(SharedLocale.tr("options.enableConsole"));
     private final JCheckBox enableTrayIcon = new JCheckBox(SharedLocale.tr("options.enableTrayIcon"));
 
@@ -150,7 +149,6 @@ public class ConfigurationDialog extends JDialog {
         buttonsPanel.addGlue();
         buttonsPanel.addElement(okButton);
         buttonsPanel.addElement(cancelButton);
-        buttonsPanel.addElement(privacyPolicyButton);
 
         tabContainer.add(tabbedPane, BorderLayout.CENTER);
         tabContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -164,7 +162,7 @@ public class ConfigurationDialog extends JDialog {
         aboutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AboutDialog.showAboutDialog(ConfigurationDialog.this);
+                AboutDialog.showAboutDialog(ConfigurationDialog.this, launcher);
             }
         });
 
@@ -179,24 +177,6 @@ public class ConfigurationDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ConsoleFrame.showMessages();
-            }
-        });
-
-        privacyPolicyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showConfirmDialog(null,
-                        SharedLocale.tr("options.externalLinkMessage"),
-                        SharedLocale.tr("options.externalLinkTitle"),
-                        JOptionPane.YES_NO_OPTION);
-
-                if (response == JOptionPane.YES_OPTION) {
-                    try {
-                        Desktop.getDesktop().browse(new URI(String.format(launcher.getProperties().getProperty("privacyPolicyUrl"))));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
             }
         });
 
