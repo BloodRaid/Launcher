@@ -6,6 +6,7 @@
 
 package com.skcraft.launcher.dialog;
 
+import com.skcraft.launcher.Launcher;
 import com.skcraft.launcher.swing.ActionListeners;
 import net.miginfocom.swing.MigLayout;
 
@@ -15,8 +16,12 @@ import java.awt.event.KeyEvent;
 
 public class AboutDialog extends JDialog {
 
-    public AboutDialog(Window parent) {
+    private final Launcher launcher;
+
+    public AboutDialog(Window parent, Launcher launcher) {
         super(parent, "About", ModalityType.DOCUMENT_MODAL);
+
+        this.launcher = launcher;
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         initComponents();
@@ -36,9 +41,11 @@ public class AboutDialog extends JDialog {
                 "the launcher that you are using."), "wrap, gapbottom unrel");
 
         JButton okButton = new JButton("OK");
+        JButton imprintButton = new JButton("Imprint");
         JButton sourceCodeButton = new JButton("Website");
 
         container.add(sourceCodeButton, "span, split 3, sizegroup bttn");
+        container.add(imprintButton, "span, split 3, sizegroup bttn");
         container.add(okButton, "tag ok, sizegroup bttn");
 
         add(container, BorderLayout.CENTER);
@@ -48,10 +55,11 @@ public class AboutDialog extends JDialog {
 
         okButton.addActionListener(ActionListeners.dispose(this));
         sourceCodeButton.addActionListener(ActionListeners.openURL(this, "https://github.com/SKCraft/Launcher"));
+        imprintButton.addActionListener(e -> ImprintDialog.showImprintDialog(AboutDialog.this, launcher));
     }
 
-    public static void showAboutDialog(Window parent) {
-        AboutDialog dialog = new AboutDialog(parent);
+    public static void showAboutDialog(Window parent, Launcher launcher) {
+        AboutDialog dialog = new AboutDialog(parent, launcher);
         dialog.setVisible(true);
     }
 }
