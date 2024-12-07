@@ -199,19 +199,20 @@ public class Bootstrap {
         if (osName.contains("win")) {
             return new File(getFileChooseDefaultDir(), getProperties().getProperty("homeFolderWindows"));
         }
-
         File dotFolder = new File(System.getProperty("user.home"), getProperties().getProperty("homeFolder"));
         String xdgFolderName = getProperties().getProperty("homeFolderLinux");
 
-        if (osName.contains("linux") && !dotFolder.exists() && xdgFolderName != null && !xdgFolderName.isEmpty()) {
-            String xdgDataHome = System.getenv("XDG_DATA_HOME");
-            if (xdgDataHome.isEmpty()) {
-                xdgDataHome = System.getProperty("user.home") + "/.local/share";
+        if (osName.contains("linux") && !dotFolder.exists()) {
+            if (xdgFolderName != null && !xdgFolderName.isEmpty()) {
+                String xdgDataHome = System.getenv("XDG_DATA_HOME");
+                if(xdgDataHome == null || xdgDataHome.isEmpty()) {
+                    xdgDataHome = System.getProperty("user.home") + "/.local/share";
+                }
+                return new File(xdgDataHome, xdgFolderName);
+            } else {
+                throw new NullPointerException("Property 'homeFolderLinux' is not defined");
             }
-
-            return new File(xdgDataHome, xdgFolderName);
         }
-
         return dotFolder;
     }
 
