@@ -7,7 +7,7 @@ plugins {
 version = "2.1.0-SNAPSHOT"
 
 application {
-    mainClassName = "com.skcraft.launcher.creator.Creator"
+    mainClass = "com.skcraft.launcher.creator.Creator"
 }
 
 dependencies {
@@ -22,12 +22,4 @@ processResources {
             it.replace('${project.version}', project.version)
         }
     }
-}
-
-shadowJar {
-    archiveClassifier.set("")
-}
-
-build {
-    dependsOn(shadowJar)
 }

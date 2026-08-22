@@ -1,0 +1,114 @@
+name: Build macOS DMG
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  build-macos-x64:
+    runs-on: macos-13
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java for Gradle build
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          architecture: x64
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Build launcher-fancy shadow jar
+        run: ./gradlew :launcher-fancy:shadowJar --stacktrace
+
+      - name: Find built launcher jar
+        run: |
+          echo "Built jars:"
+          find launcher-fancy/build/libs -name "*.jar" -maxdepth 1 -print
+
+      - name: Download Intel Java 17 runtime
+        run: |
+          mkdir -p build/macos/runtime
+          curl -L -o build/macos/java17-x64.tar.gz \
+            "https://api.adoptium.net/v3/binary/latest/17/ga/mac/x64/jdk/hotspot/normal/eclipse?project=jdk"
+          tar -xzf build/macos/java17-x64.tar.gz -C build/macos/runtime --strip-components=1
+
+      - name: Create macOS app bundle
+        run: |
+          APP_NAME="NGLauncher"
+          APP_DIR="build/macos/${APP_NAME}.app"
+
+          mkdir -p "$APP_DIR/Contents/MacOS"
+          mkdir -p "$APP_DIR/Contents/Resources"
+          mkdir -p "$APP_DIR/Contents/runtime"
+
+          JAR="$(find launcher-fancy/build/libs -maxdepth 1 -name "*.jar" | head -n 1)"
+          echo "Using launcher jar: $JAR"
+
+          cp "$JAR" "$APP_DIR/Contents/Resources/launcher.jar"
+          cp -R build/macos/runtime/* "$APP_DIR/Contents/runtime/"
+
+          cat > "$APP_DIR/Contents/Info.plist" <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+           "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleName</key>
+              <string>NGLauncher</string>
+              <key>CFBundleDisplayName</key>
+              <string>NGLauncher</string>
+              <key>CFBundleIdentifier</key>
+              <string>de.bloodraid.launcher</string>
+              <key>CFBundleVersion</key>
+              <string>1.0.0</string>
+              <key>CFBundleShortVersionString</key>
+              <string>1.0.0</string>
+              <key>CFBundleExecutable</key>
+              <string>BloodRaidLauncher</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>LSMinimumSystemVersion</key>
+              <string>10.13</string>
+          </dict>
+          </plist>
+          EOF
+
+          cat > "$APP_DIR/Contents/MacOS/BloodRaidLauncher" <<'EOF'
+          #!/bin/bash
+          DIR="$(cd "$(dirname "$0")/.." && pwd)"
+
+          JAVA="$DIR/runtime/Contents/Home/bin/java"
+          JAR="$DIR/Resources/launcher.jar"
+
+          exec "$JAVA" -jar "$JAR"
+          EOF
+
+          chmod +x "$APP_DIR/Contents/MacOS/BloodRaidLauncher"
+
+      - name: Verify bundled Java is x86_64
+        run: |
+          file "build/macos/NGLauncher.app/Contents/runtime/Contents/Home/bin/java"
+
+      - name: Create DMG
+        run: |
+          mkdir -p build/dist
+          hdiutil create \
+            -volname "NGLauncher" \
+            -srcfolder "build/macos/NGLauncher.app" \
+            -ov \
+            -format UDZO \
+            "build/dist/NGLauncher-macOS-x64.dmg"
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: NGLauncher-macOS-x64
+          path: build/dist/*.dmg

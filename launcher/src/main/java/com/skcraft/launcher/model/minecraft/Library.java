@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
 import com.skcraft.launcher.util.Environment;
+import com.skcraft.launcher.util.Platform;
 import lombok.Data;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -98,6 +99,20 @@ public class Library {
         String nativeString = getNativeString(environment);
 
         if (nativeString != null) {
+
+            // Apple Silicon / M1 / M2 / M3 / M4
+            // Prefer ARM64 LWJGL natives on macOS when available.
+            if (environment.getPlatform() == Platform.MAC_OS_X
+                    && environment.isArm64()
+                    && getDownloads().getClassifiers() != null) {
+
+                Artifact arm64Artifact = getDownloads().getClassifiers().get("natives-macos-arm64");
+
+                if (arm64Artifact != null) {
+                    return arm64Artifact;
+                }
+            }
+
             if (getDownloads().getClassifiers() == null) {
                 // BACKWARDS COMPATIBILITY: make up a virtual artifact
                 Artifact virtualArtifact = new Artifact();

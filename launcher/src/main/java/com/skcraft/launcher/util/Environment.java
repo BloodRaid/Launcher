@@ -31,6 +31,11 @@ public class Environment {
         return arch.contains("64") ? "64" : "32";
     }
 
+    public boolean isArm64() {
+        String normalized = arch.toLowerCase();
+        return normalized.equals("aarch64") || normalized.equals("arm64");
+    }
+
     /**
      * Detect the current platform.
      *
