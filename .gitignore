@@ -157,3 +157,5 @@ $RECYCLE.BIN/
 /accounts.dat
 /config.jsonlauncher/src/main/resources/com/skcraft/launcher/launcher.properties
 launcher/src/main/resources/com/skcraft/launcher/lang/Launcher.properties
+launcher/src/main/resources/com/skcraft/launcher/launcher.properties
+launcher/src/main/resources/com/skcraft/launcher/lang/Launcher.properties
